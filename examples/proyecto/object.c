@@ -61,24 +61,24 @@ ObjectData_T *read_ObjData( char *name, int *objectnum )
             fclose(fp); free(object); return(0);
         }
 
-		printf("Read in No.%d \n", i+1);
+		printf("Read in No.%d, named %s \n", i+1,object[i].name);
 
         get_buff(buf, 256, fp);
         if( sscanf(buf, "%s", buf1) != 1 ) {
-          fclose(fp); free(object); return(0);}
+          printf("Coudln't read filename");fclose(fp); free(object); return(0);}
         
         if( (object[i].id = arLoadPatt(buf1)) < 0 )
-            {fclose(fp); free(object); return(0);}
+            {printf("Couldn't find pattern\n");close(fp); free(object); return(0);}
 
         get_buff(buf, 256, fp);
         if( sscanf(buf, "%lf", &object[i].marker_width) != 1 ) {
-            fclose(fp); free(object); return(0);
+            printf("Couldn't read marker width");fclose(fp); free(object); return(0);
         }
 
         get_buff(buf, 256, fp);
-        if( sscanf(buf, "%lf %lf", &object[i].marker_center[0],
+        if( sscanf(buf, "%lf,%lf", &object[i].marker_center[0],
             &object[i].marker_center[1]) != 2 ) {
-            fclose(fp); free(object); return(0);
+            printf("Couldn't read marker center\n");fclose(fp); free(object); return(0);
         }
         
     }

@@ -22,7 +22,7 @@
 #define COLLIDE_DIST 30000.0
 
 /* Object Data */
-char            *model_name = "Data/object_data2";
+char            *model_name = "Data/object_data3";
 ObjectData_T    *object;
 int             objectnum;
 
@@ -51,12 +51,18 @@ static int  draw_object( int obj_id, double gl_para[16], int collide_flag );
 
 int main(int argc, char **argv)
 {
+
+  printf("Startup\n");
   //initialize applications
   glutInit(&argc, argv);
+  printf("Glut init finished\n");
   init();
+  printf("Init finished\n");
   
   //start video capture
+  printf("Starting video capture\n");
   arVideoCapStart();
+  printf("Ended video capture\n");
   
   //start the main event loop
   argMainLoop( NULL, keyEvent, mainLoop );
@@ -101,7 +107,7 @@ static void mainLoop(void)
   glColor3f( 1.0, 0.0, 0.0 );
   glLineWidth(6.0);
   
-  /* detect the markers in the video frame */ 
+  /* detect the markers in the video frame */
   if(arDetectMarker(dataPtr, thresh, 
 		    &marker_info, &marker_num) < 0 ) {
     cleanup(); 
@@ -146,21 +152,30 @@ static void mainLoop(void)
     object[i].visible = 1;
   }
   
-  /*check for object collisions between marker 0 and 1 */
-  if(object[0].visible && object[1].visible){
-    if(checkCollisions(object[0],object[1],COLLIDE_DIST)){
+  /*check for object collisions between markers */
+  object[0].collide = 0;
+  object[1].collide = 0;
+  //object[2].collide = 0;
+  //object[3].collide = 0;
+
+  if(object[0].visible){
+    if(object[1].visible && checkCollisions(object[0],object[1],COLLIDE_DIST)){
       object[0].collide = 1;
       object[1].collide = 1;
     }
-    else{
-      object[0].collide = 0;
-      object[1].collide = 0;
+    else if(object[2].visible && checkCollisions(object[0],object[2],COLLIDE_DIST)){
+      object[0].collide = 2;
+      object[2].collide = 1;
+    }
+    else if(object[3].visible && checkCollisions(object[0],object[3],COLLIDE_DIST)){
+      object[0].collide = 3;
+      object[3].collide = 1;
     }
   }
   
   /* draw the AR graphics */
   draw( object, objectnum );
-  
+
   /*swap the graphics buffers*/
   argSwapBuffers();
 }
@@ -255,6 +270,8 @@ static int  draw_object( int obj_id, double gl_para[16], int collide_flag )
 {
   GLfloat material_negro[] = {0.0, 0.0, 0.0, 1.0};
   GLfloat material_rojo[] = {1.0, 0.0, 0.0, 1.0};
+  GLfloat material_verde[] = {0.0,1.0,0.0,1.0};
+  GLfloat material_azul[] = {0.0,0.0,1.0,1.0};
 
   GLfloat   mat_ambient[]				= {0.0, 0.0, 1.0, 1.0};
   GLfloat   mat_ambient_collide[]     = {1.0, 0.0, 0.0, 1.0};
@@ -279,33 +296,47 @@ static int  draw_object( int obj_id, double gl_para[16], int collide_flag )
   
   glMaterialfv(GL_FRONT, GL_SHININESS, material_rojo);	
   
-  if(collide_flag){
-    if (obj_id == 0) {
-      glMaterialfv(GL_FRONT, GL_SPECULAR, material_rojo);
+  switch(collide_flag){
+    case 1:
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_rojo);
       glMaterialfv(GL_FRONT, GL_AMBIENT, material_rojo);
-      /* draw a cube */
-      glTranslatef( 0.0, 0.0, 30.0 );
+      glTranslatef(0.0,0.0,30.0);
       /* glutSolidCube(60); */
       /* glutSolidSphere(30,12,6); */
       /* glutSolidCone(30, 60, 12, 6); */
       /* glutSolidTorus(15, 30, 12, 6); */
       glutSolidTeapot(50);
-
-    }
-  }
-  else {
-    if (obj_id == 0) {
-      glMaterialfv(GL_FRONT, GL_SPECULAR, material_negro);
+      break;
+    case 2:
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_verde);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_verde);
+      glTranslatef(0.0,0.0,30.0);
+      /* glutSolidCube(60); */
+      /* glutSolidSphere(30,12,6); */
+      /* glutSolidCone(30, 60, 12, 6); */
+      /* glutSolidTorus(15, 30, 12, 6); */
+      glutSolidTeapot(50);
+      break;
+    case 3:
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_azul);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_azul);
+      glTranslatef(0.0,0.0,30.0);
+      /* glutSolidCube(60); */
+      /* glutSolidSphere(30,12,6); */
+      /* glutSolidCone(30, 60, 12, 6); */
+      /* glutSolidTorus(15, 30, 12, 6); */
+      glutSolidTeapot(50);
+      break;
+    default:
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_negro);
       glMaterialfv(GL_FRONT, GL_AMBIENT, material_negro);
-      /* draw a cube */
-      glTranslatef( 0.0, 0.0, 30.0 );
+      glTranslatef(0.0,0.0,30.0);
       /* glutSolidCube(60); */
       /* glutSolidSphere(30,12,6); */
       /* glutSolidCone(30, 60, 12, 6); */
       /* glutSolidTorus(15, 30, 12, 6); */
       glutSolidTeapot(50);
-	    
-    }
+      break;
   }
   
   argDrawMode2D();
