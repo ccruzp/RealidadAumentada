@@ -253,11 +253,14 @@ static int draw( ObjectData_T *object, int objectnum )
 /* draw the user object */
 static int  draw_object( int obj_id, double gl_para[16], int collide_flag )
 {
+  GLfloat material_negro[] = {0.0, 0.0, 0.0, 1.0};
+  GLfloat material_rojo[] = {1.0, 0.0, 0.0, 1.0};
+
   GLfloat   mat_ambient[]				= {0.0, 0.0, 1.0, 1.0};
   GLfloat   mat_ambient_collide[]     = {1.0, 0.0, 0.0, 1.0};
   GLfloat   mat_flash[]				= {0.0, 0.0, 1.0, 1.0};
   GLfloat   mat_flash_collide[]       = {1.0, 0.0, 0.0, 1.0};
-  GLfloat   mat_flash_shiny[] = {50.0};
+  GLfloat   mat_flash_shiny[] = {10.0};
   GLfloat   light_position[]  = {100.0,-200.0,200.0,0.0};
   GLfloat   ambi[]            = {0.1, 0.1, 0.1, 0.1};
   GLfloat   lightZeroColor[]  = {0.9, 0.9, 0.9, 0.1};
@@ -274,26 +277,34 @@ static int  draw_object( int obj_id, double gl_para[16], int collide_flag )
   glLightfv(GL_LIGHT0, GL_AMBIENT, ambi);
   glLightfv(GL_LIGHT0, GL_DIFFUSE, lightZeroColor);
   
-  glMaterialfv(GL_FRONT, GL_SHININESS, mat_flash_shiny);	
+  glMaterialfv(GL_FRONT, GL_SHININESS, material_rojo);	
   
   if(collide_flag){
     if (obj_id == 0) {
-      glMaterialfv(GL_FRONT, GL_SPECULAR, mat_flash_collide);
-      glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient_collide);
+      glMaterialfv(GL_FRONT, GL_SPECULAR, material_rojo);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_rojo);
       /* draw a cube */
       glTranslatef( 0.0, 0.0, 30.0 );
-      glutSolidCube(60);
+      /* glutSolidCube(60); */
       /* glutSolidSphere(30,12,6); */
+      /* glutSolidCone(30, 60, 12, 6); */
+      /* glutSolidTorus(15, 30, 12, 6); */
+      glutSolidTeapot(50);
+
     }
   }
   else {
     if (obj_id == 0) {
-      glMaterialfv(GL_FRONT, GL_SPECULAR, mat_flash);
-      glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+      glMaterialfv(GL_FRONT, GL_SPECULAR, material_negro);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_negro);
       /* draw a cube */
       glTranslatef( 0.0, 0.0, 30.0 );
-      glutSolidCube(60);
-
+      /* glutSolidCube(60); */
+      /* glutSolidSphere(30,12,6); */
+      /* glutSolidCone(30, 60, 12, 6); */
+      /* glutSolidTorus(15, 30, 12, 6); */
+      glutSolidTeapot(50);
+	    
     }
   }
   
