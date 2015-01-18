@@ -33,59 +33,58 @@ static char *get_buff( char *buf, int n, FILE *fp );
 
 ObjectData_T *read_ObjData( char *name, int *objectnum )
 {
-    FILE          *fp;
-    ObjectData_T  *object;
-    char           buf[256], buf1[256];
-    int            i;
+  FILE          *fp;
+  ObjectData_T  *object;
+  char           buf[256], buf1[256];
+  int            i;
+  
+  printf("Opening Data File %s\n",name);
+  
+  if( (fp=fopen(name, "r")) == NULL ) {
+    printf("Can't find the file - quitting \n");
+    return(0);
+  }
+  
+  get_buff(buf, 256, fp);
+  if( sscanf(buf, "%d", objectnum) != 1 ) {fclose(fp); return(0);}
 
-	printf("Opening Data File %s\n",name);
-
-    if( (fp=fopen(name, "r")) == NULL ) {
-		printf("Can't find the file - quitting \n");
-		return(0);
-	}
-
+  printf("About to load %d Models\n",*objectnum);
+  
+  object = (ObjectData_T *)malloc( sizeof(ObjectData_T) * *objectnum );
+  if( object == NULL ) return(0);
+  
+  for( i = 0; i < *objectnum; i++ ) {
+    object[i].visible = 0;        
+    
     get_buff(buf, 256, fp);
-    if( sscanf(buf, "%d", objectnum) != 1 ) {fclose(fp); return(0);}
-
-	printf("About to load %d Models\n",*objectnum);
-
-    object = (ObjectData_T *)malloc( sizeof(ObjectData_T) * *objectnum );
-    if( object == NULL ) return(0);
-
-    for( i = 0; i < *objectnum; i++ ) {
-		object[i].visible = 0;        
-		
-		get_buff(buf, 256, fp);
-        if( sscanf(buf, "%s", object[i].name) != 1 ) {
-            fclose(fp); free(object); return(0);
-        }
-
-		printf("Read in No.%d \n", i+1);
-
-        get_buff(buf, 256, fp);
-        if( sscanf(buf, "%s", buf1) != 1 ) {
-          fclose(fp); free(object); return(0);}
-        
-        if( (object[i].id = arLoadPatt(buf1)) < 0 )
-            {fclose(fp); free(object); return(0);}
-
-        get_buff(buf, 256, fp);
-        if( sscanf(buf, "%lf", &object[i].marker_width) != 1 ) {
-            fclose(fp); free(object); return(0);
-        }
-
-        get_buff(buf, 256, fp);
-        if( sscanf(buf, "%lf %lf", &object[i].marker_center[0],
-            &object[i].marker_center[1]) != 2 ) {
-            fclose(fp); free(object); return(0);
-        }
-        
+    if( sscanf(buf, "%s", object[i].name) != 1 ) {
+      fclose(fp); free(object); return(0);
     }
-
-    fclose(fp);
-
-    return( object );
+    
+    printf("Read in No.%d, named %s \n", i+1,object[i].name);
+    
+    get_buff(buf, 256, fp);
+    if( sscanf(buf, "%s", buf1) != 1 ) {
+      printf("Coudln't read filename");fclose(fp); free(object); return(0);}
+    
+    if( (object[i].id = arLoadPatt(buf1)) < 0 )
+      {printf("Couldn't find pattern\n");close(fp); free(object); return(0);}
+    
+    get_buff(buf, 256, fp);
+    if( sscanf(buf, "%lf", &object[i].marker_width) != 1 ) {
+      printf("Couldn't read marker width");fclose(fp); free(object); return(0);
+    }
+    get_buff(buf, 256, fp);
+    if( sscanf(buf, "%lf %lf", &object[i].marker_center[0],
+	       &object[i].marker_center[1]) != 2 ) {
+      printf("Couldn't read marker center\n");fclose(fp); free(object); return(0);
+    }
+    
+  }
+  
+  fclose(fp);
+  
+  return( object );
 }
 
 static char *get_buff( char *buf, int n, FILE *fp )
