@@ -297,44 +297,55 @@ static int  draw_object( int obj_id, double gl_para[16], int collide_flag )
   
   switch(collide_flag){
     case 1:
-      glMaterialfv(GL_FRONT, GL_SPECULAR,material_rojo);
-      glMaterialfv(GL_FRONT, GL_AMBIENT, material_rojo);
-      glTranslatef(0.0,0.0,30.0);
-      /* glutSolidCube(60); */
-      /* glutSolidSphere(30,12,6); */
-      /* glutSolidCone(30, 60, 12, 6); */
-      /* glutSolidTorus(15, 30, 12, 6); */
-      glutSolidTeapot(50);
+      if (obj_id == 0) {
+	glMaterialfv(GL_FRONT, GL_SPECULAR,material_rojo);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, material_rojo);
+	glTranslatef(0.0,0.0,30.0);
+	glutSolidCube(60);
+	/* glutSolidSphere(30,12,6); */
+	/* glutSolidCone(30, 60, 12, 6); */
+	/* glutSolidTorus(15, 30, 12, 6); */
+	/* glutSolidTeapot(50); */
+      }
       break;
     case 2:
-      glMaterialfv(GL_FRONT, GL_SPECULAR,material_verde);
-      glMaterialfv(GL_FRONT, GL_AMBIENT, material_verde);
-      glTranslatef(0.0,0.0,30.0);
-      /* glutSolidCube(60); */
-      /* glutSolidSphere(30,12,6); */
-      /* glutSolidCone(30, 60, 12, 6); */
-      /* glutSolidTorus(15, 30, 12, 6); */
-      glutSolidTeapot(50);
+      if (obj_id == 0) {
+	glMaterialfv(GL_FRONT, GL_SPECULAR,material_verde);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, material_verde);
+	glTranslatef(0.0,0.0,30.0);
+	glutSolidCube(60);
+	/* glutSolidSphere(30,12,6); */
+	/* glutSolidCone(30, 60, 12, 6); */
+	/* glutSolidTorus(15, 30, 12, 6); */
+	/* glutSolidTeapot(50); */
+      }
       break;
     case 3:
-      glMaterialfv(GL_FRONT, GL_SPECULAR,material_azul);
-      glMaterialfv(GL_FRONT, GL_AMBIENT, material_azul);
-      glTranslatef(0.0,0.0,30.0);
-      /* glutSolidCube(60); */
-      /* glutSolidSphere(30,12,6); */
-      /* glutSolidCone(30, 60, 12, 6); */
-      /* glutSolidTorus(15, 30, 12, 6); */
-      glutSolidTeapot(50);
+      if (obj_id == 0) {
+	glMaterialfv(GL_FRONT, GL_SPECULAR,material_azul);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, material_azul);
+	glTranslatef(0.0,0.0,30.0);
+	glutSolidCube(60);
+	/* glutSolidSphere(30,12,6); */
+	/* glutSolidCone(30, 60, 12, 6); */
+	/* glutSolidTorus(15, 30, 12, 6); */
+	/* glutSolidTeapot(50); */
+      }
       break;
     default:
       glMaterialfv(GL_FRONT, GL_SPECULAR,material_negro);
       glMaterialfv(GL_FRONT, GL_AMBIENT, material_negro);
       glTranslatef(0.0,0.0,30.0);
-      /* glutSolidCube(60); */
-      /* glutSolidSphere(30,12,6); */
-      /* glutSolidCone(30, 60, 12, 6); */
-      /* glutSolidTorus(15, 30, 12, 6); */
-      glutSolidTeapot(50);
+      if (obj_id == 0) {
+	glutSolidCube(60);
+      /* } else if (obj_id == 1) { */
+      /* 	glutSolidSphere(30,12,6); */
+      /* } else if (obj_id == 2) { */
+      /* 	glutSolidCone(30, 60, 12, 6); */
+      /* } else if (obj_id == 3) {	 */
+      /* 	glutSolidTorus(15, 30, 12, 6); */
+      }
+      /* glutSolidTeapot(50); */
       break;
   }
   
