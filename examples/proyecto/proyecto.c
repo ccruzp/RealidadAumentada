@@ -164,9 +164,14 @@ static void mainLoop(void)
       object[0].collide = 1;
       object[3].collide = 1;
 
-    } else if(object[4].visible && checkCollisions(object[0],object[4],COLLIDE_DIST)){
-      object[0].collide = 2;
-      object[4].collide = 2;
+    }
+    if(object[4].visible && checkCollisions(object[0],object[4],COLLIDE_DIST)){
+      /* if (object[0].collide == 1) { */
+      /* 	object[0].collide = 4; */
+      /* } else { */
+	object[0].collide = 2;
+	object[4].collide = 2;
+      /* } */
 
     } else if(object[5].visible && checkCollisions(object[0],object[5],COLLIDE_DIST)){
       object[0].collide = 3;
@@ -295,15 +300,14 @@ static int  draw_object( int obj_id, double gl_para[16], int collide_flag )
   GLfloat material_rojo[] = {1.0, 0.0, 0.0, 1.0};
   GLfloat material_verde[] = {0.0,1.0,0.0,1.0};
   GLfloat material_azul[] = {0.0,0.0,1.0,1.0};
+  GLfloat material_amarillo[] = {1.0,1.0,0.0,1.0};
+  GLfloat material_magenta[] = {1.0,0.0,1.0,1.0};
+  GLfloat material_cian[] = {0.0,1.0,1.0,1.0};
+  GLfloat material_blanco[] = {1.0,1.0,1.0,1.0};
 
-  GLfloat   mat_ambient[]				= {0.0, 0.0, 1.0, 1.0};
-  GLfloat   mat_ambient_collide[]     = {1.0, 0.0, 0.0, 1.0};
-  GLfloat   mat_flash[]				= {0.0, 0.0, 1.0, 1.0};
-  GLfloat   mat_flash_collide[]       = {1.0, 0.0, 0.0, 1.0};
-  GLfloat   mat_flash_shiny[] = {10.0};
-  GLfloat   light_position[]  = {100.0,-200.0,200.0,0.0};
+  GLfloat   light_position[]  = {100.0,100.0,200.0,0.0};
   GLfloat   ambi[]            = {0.1, 0.1, 0.1, 0.1};
-  GLfloat   lightZeroColor[]  = {0.9, 0.9, 0.9, 0.1};
+  GLfloat   lightZeroColor[]  = {0.1, 0.1, 0.1, 0.1};
   
   argDrawMode3D();
   argDraw3dCamera( 0, 0 );
@@ -318,56 +322,105 @@ static int  draw_object( int obj_id, double gl_para[16], int collide_flag )
   glLightfv(GL_LIGHT0, GL_DIFFUSE, lightZeroColor);
   
   glMaterialfv(GL_FRONT, GL_SHININESS, material_rojo);	
-    
+  /* glutStrokeString(GLUT_STROKE_MONO_ROMAN, "HOLA"); */
   switch(collide_flag){
-    case 1:
-  	glMaterialfv(GL_FRONT, GL_SPECULAR,material_rojo);
-  	glMaterialfv(GL_FRONT, GL_AMBIENT, material_rojo);
-  	glTranslatef(0.0,0.0,30.0);
-      if (obj_id == 0) {
-  	glutSolidCube(60);
-      } else if (obj_id == 1) {
-      	glutSolidSphere(30,12,6);
-      } else if (obj_id == 2) {
-      	glutSolidCone(30, 60, 12, 6);
-      }
-      break;
-    case 2:
+  case 1:
+    if (object[4].visible && object[5].visible) {
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_blanco);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_blanco);
+      /* glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, "Blanco"); */
+
+    } else if(object[4].visible) {
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_amarillo);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_amarillo);
+
+    } else if (object[5].visible) {
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_magenta);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_magenta);
+    } else {
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_rojo);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_rojo);
+      /* glRasterPos3f(50, 50, 50); */
+      /* glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, "Rojo"); */
+    }
+    glTranslatef(0.0,0.0,30.0);
+    if (obj_id == 0) {
+      glutSolidCube(60);
+    } else if (obj_id == 1) {
+      glutSolidSphere(30,12,6);
+    } else if (obj_id == 2) {
+      glutSolidCone(30, 60, 12, 6);
+    }
+    break;
+  case 2:
+    if (object[3].visible && object[5].visible) {
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_blanco);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_blanco);      
+    } else if (object[3].visible) {
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_amarillo);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_amarillo);
+    } else if (object[5].visible) {
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_cian);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_cian);
+    } else {
       glMaterialfv(GL_FRONT, GL_SPECULAR,material_verde);
       glMaterialfv(GL_FRONT, GL_AMBIENT, material_verde);
-      glTranslatef(0.0,0.0,30.0);
-      if (obj_id == 0) {
-  	glutSolidCube(60);
-      } else if (obj_id == 1) {
-      	glutSolidSphere(30,12,6);
-      } else if (obj_id == 2) {
-      	glutSolidCone(30, 60, 12, 6);
-      }
-      break;
-    case 3:
-  	glMaterialfv(GL_FRONT, GL_SPECULAR,material_azul);
-  	glMaterialfv(GL_FRONT, GL_AMBIENT, material_azul);
-  	glTranslatef(0.0,0.0,30.0);
-  	if (obj_id == 0) {
-	  glutSolidCube(60);
-	} else if(obj_id == 1) {
-	  glutSolidSphere(30,12,6);
-	} else if (obj_id == 2) {
-	  glutSolidCone(30, 60, 12, 6);
-	}
-      break;
-    default:
-      glMaterialfv(GL_FRONT, GL_SPECULAR,material_negro);
-      glMaterialfv(GL_FRONT, GL_AMBIENT, material_negro);
-      glTranslatef(0.0,0.0,30.0);
-      if (obj_id == 0) {
-  	glutSolidCube(60);
-      } else if (obj_id == 1) {
-      	glutSolidSphere(30,12,6);
-      } else if (obj_id == 2) {
-      	glutSolidCone(30, 60, 12, 6);
-      }
-      break;
+    }
+    glTranslatef(0.0,0.0,30.0);
+    if (obj_id == 0) {
+      glutSolidCube(60);
+    } else if (obj_id == 1) {
+      glutSolidSphere(30,12,6);
+    } else if (obj_id == 2) {
+      glutSolidCone(30, 60, 12, 6);
+    }
+    break;
+  case 3:
+    if (object[3].visible && object[4].visible) {
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_blanco);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_blanco);      
+    } else if (object[3].visible) {
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_magenta);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_magenta);
+    } else if (object[4].visible) {
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_cian);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_cian);
+    } else {
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_azul);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_azul);
+    }
+    glTranslatef(0.0,0.0,30.0);
+    if (obj_id == 0) {
+      glutSolidCube(60);
+    } else if(obj_id == 1) {
+      glutSolidSphere(30,12,6);
+    } else if (obj_id == 2) {
+      glutSolidCone(30, 60, 12, 6);
+    }
+    break;
+  case 4:
+    glMaterialfv(GL_FRONT, GL_SPECULAR,material_amarillo);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, material_amarillo);
+    glTranslatef(0.0,0.0,30.0);
+    if (obj_id == 0) {
+      glutSolidCube(60);
+    } else if(obj_id == 1) {
+      glutSolidSphere(30,12,6);
+    } else if (obj_id == 2) {
+      glutSolidCone(30, 60, 12, 6);
+    }
+  default:
+    glMaterialfv(GL_FRONT, GL_SPECULAR,material_negro);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, material_negro);
+    glTranslatef(0.0,0.0,30.0);
+    if (obj_id == 0) {
+      glutSolidCube(60);
+    } else if (obj_id == 1) {
+      glutSolidSphere(30,12,6);
+    } else if (obj_id == 2) {
+      glutSolidCone(30, 60, 12, 6);
+    }
+    break;
   }
   
   argDrawMode2D();
