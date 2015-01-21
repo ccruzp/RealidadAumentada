@@ -155,23 +155,49 @@ static void mainLoop(void)
   /*check for object collisions between markers */
   object[0].collide = 0;
   object[1].collide = 0;
-  //object[2].collide = 0;
-  //object[3].collide = 0;
-
+  object[2].collide = 0;
+  object[3].collide = 0;
+  object[4].collide = 0;
+  
   if(object[0].visible){
-    if(object[1].visible && checkCollisions(object[0],object[1],COLLIDE_DIST)){
+    if(object[3].visible && checkCollisions(object[0],object[3],COLLIDE_DIST)){
       object[0].collide = 1;
-      object[1].collide = 1;
-    }
-    else if(object[2].visible && checkCollisions(object[0],object[2],COLLIDE_DIST)){
-      object[0].collide = 2;
-      object[2].collide = 1;
-    }
-    else if(object[3].visible && checkCollisions(object[0],object[3],COLLIDE_DIST)){
-      object[0].collide = 3;
       object[3].collide = 1;
+
+    } else if(object[4].visible && checkCollisions(object[0],object[4],COLLIDE_DIST)){
+      object[0].collide = 2;
+      object[4].collide = 2;
+
+    } else if(object[5].visible && checkCollisions(object[0],object[5],COLLIDE_DIST)){
+      object[0].collide = 3;
+      object[5].collide = 3;
     }
-  }
+
+  } else if (object[1].visible) {
+    if(object[3].visible && checkCollisions(object[1],object[3],COLLIDE_DIST)){
+      object[1].collide = 1;
+      object[3].collide = 1;
+
+    } else if(object[4].visible && checkCollisions(object[1],object[4],COLLIDE_DIST)){
+      object[1].collide = 2;
+      object[4].collide = 2;
+    } else if(object[5].visible && checkCollisions(object[1],object[5],COLLIDE_DIST)){
+      object[1].collide = 3;
+      object[5].collide = 3;
+    }
+  } else if (object[2].visible) {
+    if(object[3].visible && checkCollisions(object[2],object[3],COLLIDE_DIST)){
+      object[2].collide = 1;
+      object[3].collide = 1;
+    } else if(object[4].visible && checkCollisions(object[2],object[4],COLLIDE_DIST)){
+      object[2].collide = 2;
+      object[4].collide = 2;
+    } else if(object[5].visible && checkCollisions(object[2],object[5],COLLIDE_DIST)){
+      object[2].collide = 3;
+      object[5].collide = 3;
+    }
+  }    
+   
   
   /* draw the AR graphics */
   draw( object, objectnum );
@@ -186,7 +212,6 @@ static int checkCollisions( ObjectData_T object0, ObjectData_T object1, float co
   float x1,y1,z1;
   float x2,y2,z2;
   float dist;
-  
   x1 = object0.trans[0][3];
   y1 = object0.trans[1][3];
   z1 = object0.trans[2][3];
@@ -198,10 +223,9 @@ static int checkCollisions( ObjectData_T object0, ObjectData_T object1, float co
   dist = (x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)+(z1-z2)*(z1-z2);
   
   printf("Dist = %3.2f\n",dist);
-  
   if(dist < collide_dist)
     return 1;
-  else 
+   else 
     return 0;
 }
 static void init( void )
@@ -294,58 +318,55 @@ static int  draw_object( int obj_id, double gl_para[16], int collide_flag )
   glLightfv(GL_LIGHT0, GL_DIFFUSE, lightZeroColor);
   
   glMaterialfv(GL_FRONT, GL_SHININESS, material_rojo);	
-  
+    
   switch(collide_flag){
     case 1:
+  	glMaterialfv(GL_FRONT, GL_SPECULAR,material_rojo);
+  	glMaterialfv(GL_FRONT, GL_AMBIENT, material_rojo);
+  	glTranslatef(0.0,0.0,30.0);
       if (obj_id == 0) {
-	glMaterialfv(GL_FRONT, GL_SPECULAR,material_rojo);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, material_rojo);
-	glTranslatef(0.0,0.0,30.0);
-	glutSolidCube(60);
-	/* glutSolidSphere(30,12,6); */
-	/* glutSolidCone(30, 60, 12, 6); */
-	/* glutSolidTorus(15, 30, 12, 6); */
-	/* glutSolidTeapot(50); */
+  	glutSolidCube(60);
+      } else if (obj_id == 1) {
+      	glutSolidSphere(30,12,6);
+      } else if (obj_id == 2) {
+      	glutSolidCone(30, 60, 12, 6);
       }
       break;
     case 2:
+      glMaterialfv(GL_FRONT, GL_SPECULAR,material_verde);
+      glMaterialfv(GL_FRONT, GL_AMBIENT, material_verde);
+      glTranslatef(0.0,0.0,30.0);
       if (obj_id == 0) {
-	glMaterialfv(GL_FRONT, GL_SPECULAR,material_verde);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, material_verde);
-	glTranslatef(0.0,0.0,30.0);
-	glutSolidCube(60);
-	/* glutSolidSphere(30,12,6); */
-	/* glutSolidCone(30, 60, 12, 6); */
-	/* glutSolidTorus(15, 30, 12, 6); */
-	/* glutSolidTeapot(50); */
+  	glutSolidCube(60);
+      } else if (obj_id == 1) {
+      	glutSolidSphere(30,12,6);
+      } else if (obj_id == 2) {
+      	glutSolidCone(30, 60, 12, 6);
       }
       break;
     case 3:
-      if (obj_id == 0) {
-	glMaterialfv(GL_FRONT, GL_SPECULAR,material_azul);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, material_azul);
-	glTranslatef(0.0,0.0,30.0);
-	glutSolidCube(60);
-	/* glutSolidSphere(30,12,6); */
-	/* glutSolidCone(30, 60, 12, 6); */
-	/* glutSolidTorus(15, 30, 12, 6); */
-	/* glutSolidTeapot(50); */
-      }
+  	glMaterialfv(GL_FRONT, GL_SPECULAR,material_azul);
+  	glMaterialfv(GL_FRONT, GL_AMBIENT, material_azul);
+  	glTranslatef(0.0,0.0,30.0);
+  	if (obj_id == 0) {
+	  glutSolidCube(60);
+	} else if(obj_id == 1) {
+	  glutSolidSphere(30,12,6);
+	} else if (obj_id == 2) {
+	  glutSolidCone(30, 60, 12, 6);
+	}
       break;
     default:
       glMaterialfv(GL_FRONT, GL_SPECULAR,material_negro);
       glMaterialfv(GL_FRONT, GL_AMBIENT, material_negro);
       glTranslatef(0.0,0.0,30.0);
       if (obj_id == 0) {
-	glutSolidCube(60);
-      /* } else if (obj_id == 1) { */
-      /* 	glutSolidSphere(30,12,6); */
-      /* } else if (obj_id == 2) { */
-      /* 	glutSolidCone(30, 60, 12, 6); */
-      /* } else if (obj_id == 3) {	 */
-      /* 	glutSolidTorus(15, 30, 12, 6); */
+  	glutSolidCube(60);
+      } else if (obj_id == 1) {
+      	glutSolidSphere(30,12,6);
+      } else if (obj_id == 2) {
+      	glutSolidCone(30, 60, 12, 6);
       }
-      /* glutSolidTeapot(50); */
       break;
   }
   
