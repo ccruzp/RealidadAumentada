@@ -166,19 +166,16 @@ static void mainLoop(void)
 
     }
     if(object[4].visible && checkCollisions(object[0],object[4],COLLIDE_DIST)){
-      /* if (object[0].collide == 1) { */
-      /* 	object[0].collide = 4; */
-      /* } else { */
 	object[0].collide = 2;
 	object[4].collide = 2;
-      /* } */
 
     } else if(object[5].visible && checkCollisions(object[0],object[5],COLLIDE_DIST)){
       object[0].collide = 3;
       object[5].collide = 3;
     }
 
-  } else if (object[1].visible) {
+  }
+  if (object[1].visible) {
     if(object[3].visible && checkCollisions(object[1],object[3],COLLIDE_DIST)){
       object[1].collide = 1;
       object[3].collide = 1;
@@ -190,7 +187,8 @@ static void mainLoop(void)
       object[1].collide = 3;
       object[5].collide = 3;
     }
-  } else if (object[2].visible) {
+  }
+  if (object[2].visible) {
     if(object[3].visible && checkCollisions(object[2],object[3],COLLIDE_DIST)){
       object[2].collide = 1;
       object[3].collide = 1;
@@ -307,7 +305,7 @@ static int  draw_object( int obj_id, double gl_para[16], int collide_flag )
 
   GLfloat   light_position[]  = {100.0,100.0,200.0,0.0};
   GLfloat   ambi[]            = {0.1, 0.1, 0.1, 0.1};
-  GLfloat   lightZeroColor[]  = {0.1, 0.1, 0.1, 0.1};
+  GLfloat   lightZeroColor[]  = {0.5, 0.5, 0.5, 0.1};
   
   argDrawMode3D();
   argDraw3dCamera( 0, 0 );
@@ -322,13 +320,11 @@ static int  draw_object( int obj_id, double gl_para[16], int collide_flag )
   glLightfv(GL_LIGHT0, GL_DIFFUSE, lightZeroColor);
   
   glMaterialfv(GL_FRONT, GL_SHININESS, material_rojo);	
-  /* glutStrokeString(GLUT_STROKE_MONO_ROMAN, "HOLA"); */
   switch(collide_flag){
   case 1:
     if (object[4].visible && object[5].visible) {
       glMaterialfv(GL_FRONT, GL_SPECULAR,material_blanco);
       glMaterialfv(GL_FRONT, GL_AMBIENT, material_blanco);
-      /* glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, "Blanco"); */
 
     } else if(object[4].visible) {
       glMaterialfv(GL_FRONT, GL_SPECULAR,material_amarillo);
@@ -341,6 +337,9 @@ static int  draw_object( int obj_id, double gl_para[16], int collide_flag )
       glMaterialfv(GL_FRONT, GL_SPECULAR,material_rojo);
       glMaterialfv(GL_FRONT, GL_AMBIENT, material_rojo);
       /* glRasterPos3f(50, 50, 50); */
+      /* glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, "Blanco"); */
+      /* glutStrokeString(GLUT_STROKE_MONO_ROMAN, "HOLA"); */
+
       /* glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, "Rojo"); */
     }
     glTranslatef(0.0,0.0,30.0);
